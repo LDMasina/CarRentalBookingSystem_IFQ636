@@ -14,6 +14,7 @@ app.use(express.json());
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/vehicles', require('./routes/vehicleRoutes')); // This line will register the vehicle routes
 app.use('/api/bookings', require('./routes/bookingRoutes')); // This line will register the booking routes
+app.use('/api/categories', require('./routes/vehicleCategoryRoutes')); // This line will register the vehicle category routes
 app.use('/api/reviews', require('./routes/reviewRoutes')); // This line will register the review routes
 //app.use('/api/tasks', require('./routes/taskRoutes'));
 
