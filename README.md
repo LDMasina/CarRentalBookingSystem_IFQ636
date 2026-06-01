@@ -1,4 +1,5 @@
 # CarRentalBookingSystem_IFQ636
+## By Lance Masina
 
 A web-based automotive-hire marketplace extending the nahaQUT sample application 
 (IFQ636 Unit Coordinator, 2026). Built on Node.js, React.js, and MongoDB Atlas, 
