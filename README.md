@@ -96,7 +96,7 @@ https://lancemasina-qut.atlassian.net/jira/software/projects/CRBS/boards/34/back
 
 ## References
 
-Cited references are included in some of thwe inline commentary of the code using APA Style referencing. Full References list provided in Assigment template that has been submitted via Canvas.
+Cited references are included in some of the inline commentary of the code using APA Style referencing. Full References list provided in Assigment template that has been submitted via Canvas.
 
 ---
 
