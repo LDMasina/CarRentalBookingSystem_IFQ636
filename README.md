@@ -94,6 +94,10 @@ https://github.com/LDMasina/CarRentalBookingSystem_IFQ636
 
 https://lancemasina-qut.atlassian.net/jira/software/projects/CRBS/boards/34/backlog?atlOrigin=eyJpIjoiNDMwOGVmNTA3ZWU0NDE2ZDkwOWMwMGNjZmM4MDc1OGIiLCJwIjoiaiJ9
 
+## References
+
+Cited references are included in some of thwe inline commentary of the code using APA Style referencing. Full References list provided in Assigment template that has been submitted via Canvas.
+
 ---
 
 **GitHub link of the starter project: **[https://github.com/nahaQUT/sampleapp_IFQ636.git](https://github.com/nahaQUT/sampleapp_IFQ636.git)
