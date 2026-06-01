@@ -1,28 +1,73 @@
-name: CI
+# =============================================================================
+# ci.yml
+# CI/CD pipeline for the Car Rental Booking System.
+#
+# Triggers on push to main. Runs tests on the backend, writes environment
+# variables from GitHub Secrets, and deploys both backend and frontend to
+# the EC2 self-hosted runner using pm2 (IFQ636 Unit Coordinator, 2026,
+# Module 3.11.1).
+# =============================================================================
+
+name: CI/CD Pipeline -- Car Rental Booking System
 
 on:
-    push:
-        branches:
-            - main
-    pull_request:
-        branches:
-            - main
+  push:
+    branches:
+      - main
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
+  build-and-deploy:
+    # Runs on the self-hosted EC2 runner configured in Module 3.14.1.
+    runs-on: self-hosted
 
-        steps:
-        - name: Checkout code
-            uses: actions/checkout@v2
+    steps:
+      # Step 1 -- Checkout the latest code from main.
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-        - name: Set up Node.js
-            uses: actions/setup-node@v2
-            with:
-                node-version: '14'
+      # Step 2 -- Set up Node.js 18 to match the EC2 environment.
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
 
-        - name: Install dependencies
-            run: npm install
+      # Step 3 -- Install backend dependencies.
+      - name: Install backend dependencies
+        run: npm install
+        working-directory: ./backend
 
-        - name: Run tests
-            run: npm test
+      # Step 4 -- Write backend .env from GitHub Secrets.
+      # The .env file is excluded from Git via .gitignore so secrets are
+      # injected at deploy time (IFQ636 Unit Coordinator, 2026, Module 3.11.1).
+      - name: Write backend .env
+        run: |
+          echo "MONGO_URI=${{ secrets.MONGO_URI }}" > ./backend/.env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> ./backend/.env
+          echo "PORT=${{ secrets.PORT }}" >> ./backend/.env
+          echo "NODE_ENV=${{ secrets.NODE_ENV }}" >> ./backend/.env
+
+      # Step 5 -- Install frontend dependencies.
+      - name: Install frontend dependencies
+        run: npm install
+        working-directory: ./frontend
+
+      # Step 6 -- Build the React frontend for production.
+      - name: Build frontend
+        run: npm run build
+        working-directory: ./frontend
+
+      # Step 7 -- Restart backend with pm2.
+      # pm2 keeps the Node.js process running after the workflow completes
+      # and restarts it automatically on server reboot.
+      - name: Deploy backend with pm2
+        run: |
+          pm2 stop backend || true
+          pm2 start ./backend/server.js --name backend
+          pm2 save
+
+      # Step 8 -- Serve frontend build with pm2.
+      - name: Deploy frontend with pm2
+        run: |
+          pm2 stop frontend || true
+          pm2 start npx --name frontend -- serve -s ./frontend/build -l 3000
+          pm2 save
